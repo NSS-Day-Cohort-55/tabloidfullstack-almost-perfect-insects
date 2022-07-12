@@ -18,7 +18,23 @@ namespace Tabloid.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     // create sql query to get all posts
-                    cmd.CommandText = "SELECT * FROM Post";
+                    cmd.CommandText = @"SELECT 
+                                            p.*, 
+	                                        up.DisplayName, 
+	                                        up.FirstName,
+	                                        up.LastName,
+	                                        up.Email,
+	                                        up.CreateDateTime AS UserCreateDateTime, 
+	                                        up.ImageLocation AS  UserImageLocation,
+	                                        up.UserTypeId,
+	                                        c.Name AS CategoryName
+                                        FROM Post p
+                                        JOIN UserProfile up ON up.Id = p.UserProfileId
+                                        JOIN Category c ON c.Id = p.CategoryId
+                                        WHERE p.IsApproved = 1 AND p.PublishDateTime IS NOT NULL
+                                        AND p.PublishDateTime < SYSDATETIME()
+                                        ORDER BY p.PublishDateTime DESC
+                                        ";
                     // execute query
                     using (var reader = cmd.ExecuteReader())
                     {
@@ -36,7 +52,26 @@ namespace Tabloid.Repositories
                                 PublishDateTime = DbUtils.GetNullableDateTime(reader, "PublishDateTime"),
                                 IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved")),
                                 CategoryId = DbUtils.GetInt(reader, "CategoryId"),
-                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId")
+                                UserProfileId = DbUtils.GetInt(reader, "UserProfileId"),
+                                
+                                UserProfile = new UserProfile
+                                {
+                                    DisplayName = DbUtils.GetString(reader, "DisplayName"),
+                                    FirstName = DbUtils.GetString(reader,  "FirstName"),
+                                    LastName = DbUtils.GetString(reader, "LastName"),
+                                    Email = DbUtils.GetString(reader, "Email"),
+                                    CreateDateTime = DbUtils.GetDateTime(reader, "UserCreateDateTime"),
+                                    ImageLocation = DbUtils.GetString(reader, "UserImageLocation"),
+                                    UserTypeId = DbUtils.GetInt(reader, "UserTypeId")
+
+                                },
+
+                                Category = new Category
+                                {
+                                    Name = DbUtils.GetString(reader, "CategoryName")
+                                }
+
+                                
                             });
                         }
                     }
