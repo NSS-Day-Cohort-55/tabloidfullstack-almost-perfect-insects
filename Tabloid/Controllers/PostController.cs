@@ -29,9 +29,9 @@ namespace Tabloid.Controllers
 
         // GET api/<PostController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Post Get(int id)
         {
-            return "value";
+            return _postRepository.GetById(id);
         }
 
         // POST api/<PostController>
