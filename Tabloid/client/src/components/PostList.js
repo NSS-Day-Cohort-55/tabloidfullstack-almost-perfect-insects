@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import { getAllPosts } from "../modules/postManager";
+import PostCard from "./PostCard";
 
 
 const PostList = ( ) => {
@@ -16,13 +17,12 @@ const PostList = ( ) => {
     },[])
 
 
-    return (
-        posts.map((post) => {
-            return <p>
-                {`${post.title} ${post.userProfile?.displayName} ${post.category?.name}`}
-            </p>
-        })
+    return (<div>
+        {posts.map((post) => <PostCard post={post} key={post.id}/>)}
+        </div>
     )
 }
+
+
 
 export default PostList;
