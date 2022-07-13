@@ -11,3 +11,11 @@ export const getAllPosts = () => {
     }).then((res) => res.json());
   });
 };
+
+export const getPostById = (id) => {
+  return getToken().then((token) =>
+    fetch(api + `/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    }).then((r) => r.json()),
+  );
+};
