@@ -19,3 +19,17 @@ export const getPostById = (id) => {
     }).then((r) => r.json()),
   );
 };
+
+export const addPost = (post) => {
+  return getToken()
+      .then((token) => fetch(api, {
+          method: "POST",
+          headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify(post),
+      })
+      .then((resp) => resp.json())
+      )
+}
