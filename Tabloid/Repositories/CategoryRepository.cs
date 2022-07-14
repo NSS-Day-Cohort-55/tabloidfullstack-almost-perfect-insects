@@ -18,7 +18,8 @@ namespace Tabloid.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"SELECT *
-                        FROM Category";
+                        FROM Category
+                        ORDER BY [Name]";
 
                     using (var reader = cmd.ExecuteReader())
                     {
