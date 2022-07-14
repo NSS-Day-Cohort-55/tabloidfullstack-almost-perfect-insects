@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
 using Tabloid.Models;
 using Tabloid.Utils;
+using System;
 
 namespace Tabloid.Repositories
 {
@@ -86,6 +87,31 @@ namespace Tabloid.Repositories
                 }
             }
             return post;
+        }
+
+        public void AddPost(Post post)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Post
+                        (Title, Content, ImageLocation, CreateDateTime, PublishDateTime, IsApproved, UserProfileId, CategoryId)
+                        OUTPUT INSERTED.Id
+                        VALUES (@title, @content, @imageLocation, SYSDATETIME(), @publishDateTime, @isApproved, @userProfileId, @categoryId)";
+                    DbUtils.AddParameter(cmd, "@id", post.Id);
+                    DbUtils.AddParameter(cmd, "@title", post.Title);
+                    DbUtils.AddParameter(cmd, "@content", post.Content);
+                    DbUtils.AddParameter(cmd, "@imageLocation", post.ImageLocation);
+                    DbUtils.AddParameter(cmd, "@publishDateTime", post.PublishDateTime);
+                    DbUtils.AddParameter(cmd, "@isApproved", post.IsApproved);
+                    DbUtils.AddParameter(cmd, "@userProfileId", post.UserProfileId);
+                    DbUtils.AddParameter(cmd, "@categoryId", post.CategoryId);
+
+                    post.Id = (int)cmd.ExecuteScalar();
+                }
+            }
         }
 
         private Post NewPostFromReader(SqlDataReader reader)
