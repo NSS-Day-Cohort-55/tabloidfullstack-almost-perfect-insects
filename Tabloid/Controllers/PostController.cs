@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Tabloid.Repositories;
 using Tabloid.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,10 +15,12 @@ namespace Tabloid.Controllers
     public class PostController : ControllerBase
     {
         private IPostRepository _postRepository;
+        private IUserProfileRepository _userProfileRepository;
 
-        public PostController(IPostRepository postRepository)
+        public PostController(IPostRepository postRepository, IUserProfileRepository userProfileRepository)
         {
             _postRepository = postRepository;
+            _userProfileRepository = userProfileRepository;
         }
 
         // GET: api/<PostController>
@@ -36,8 +39,12 @@ namespace Tabloid.Controllers
 
         // POST api/<PostController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Post post)
         {
+            post.UserProfileId = GetCurrentUserProfile().Id;
+            post.IsApproved = true;
+            _postRepository.AddPost(post);
+            return CreatedAtAction("Get", new { id = post.Id }, post);
         }
 
         // PUT api/<PostController>/5
@@ -50,6 +57,12 @@ namespace Tabloid.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+        }
+
+        private UserProfile GetCurrentUserProfile()
+        {
+            var firebaseUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+            return _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
         }
     }
 }
