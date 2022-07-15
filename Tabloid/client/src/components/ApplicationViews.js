@@ -6,6 +6,7 @@ import Hello from "./Hello";
 import PostList from "./PostList";
 import PostDetails from "./PostDetails";
 import PostForm from "./PostForm";
+import TagList from "./TagList";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -22,6 +23,9 @@ export default function ApplicationViews({ isLoggedIn }) {
             <Route index element={<PostList />} />
             <Route path=":id" element={<PostDetails />} />
             <Route path="add" element={<PostForm />} />
+          </Route>
+          <Route path="tag">
+            <Route index element={<TagList />} />
           </Route>
           <Route path="*" element={<p>Whoops, nothing here...</p>} />
         </Route>
