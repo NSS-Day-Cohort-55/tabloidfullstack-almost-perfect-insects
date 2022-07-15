@@ -35,14 +35,14 @@ export const addPost = (post) => {
 }
 
 export const editPost = (post) => {
-  return getToken().then((token) => fetch(api, {
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(post),
-
-  }).then(parseResponse => parseResponse.json()))
-}
+  return getToken()
+  .then((token) => fetch(`${api}/${post.id}`, {
+      method: "PUT",
+      headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify(post),
+  }));
+};
 
