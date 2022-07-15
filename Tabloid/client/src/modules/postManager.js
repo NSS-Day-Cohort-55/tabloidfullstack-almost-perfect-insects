@@ -45,3 +45,4 @@ export const editPost = (post) => {
 
   }).then(parseResponse => parseResponse.json()))
 }
+
