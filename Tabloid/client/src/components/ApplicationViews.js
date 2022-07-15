@@ -8,6 +8,7 @@ import PostDetails from "./PostDetails";
 import PostForm from "./PostForm";
 import TagList from "./TagList";
 import CategoryList from "./CategoryList";
+import { PostEdit } from "./PostEditForm";
 
 export default function ApplicationViews({ isLoggedIn }) {
   return (
@@ -22,6 +23,7 @@ export default function ApplicationViews({ isLoggedIn }) {
           <Route path="register" element={<Register />} />
           <Route path="post">
             <Route index element={<PostList />} />
+          <Route path=":postId/Edit" element={<PostEdit/>}/>
             <Route path=":id" element={<PostDetails />} />
             <Route path="add" element={<PostForm />} />
           </Route>
