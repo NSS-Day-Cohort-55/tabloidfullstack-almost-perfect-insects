@@ -22,14 +22,26 @@ export const getPostById = (id) => {
 
 export const addPost = (post) => {
   return getToken()
-      .then((token) => fetch(api, {
-          method: "POST",
-          headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-          },
-          body: JSON.stringify(post),
-      })
+    .then((token) => fetch(api, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(post),
+    })
       .then((resp) => resp.json())
-      )
+    )
+}
+
+export const editPost = (post) => {
+  return getToken().then((token) => fetch(api, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(post),
+
+  }).then(parseResponse => parseResponse.json()))
 }
