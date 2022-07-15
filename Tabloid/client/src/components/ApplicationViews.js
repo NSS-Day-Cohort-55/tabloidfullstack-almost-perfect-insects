@@ -27,12 +27,11 @@ export default function ApplicationViews({ isLoggedIn }) {
           </Route>
           <Route path="tag">
             <Route index element={<TagList />} />
-            <Route path="category">
-              <Route index element={<CategoryList />} />
-
-            </Route>
-            <Route path="*" element={<p>Whoops, nothing here...</p>} />
           </Route>
+          <Route path="category">
+            <Route index element={<CategoryList />} />
+          </Route>
+          <Route path="*" element={<p>Whoops, nothing here...</p>} />
         </Route>
       </Routes>
 
